@@ -1,37 +1,36 @@
-  
 pipeline {
-	agent any
-	stages {
+  agent any
+  stages {
+    stage('Create kubernetes cluster') {
+      steps {
+        withAWS(region: 'us-west-2', credentials: 'aws-static') {
+          sh '''sh \'\'\'
+	eksctl create cluster \\
+	--name capstonecluster \\
+	--version 1.13 \\
+	--nodegroup-name standard-workers \\
+	--node-type t2.small \\
+	--nodes 2 \\
+	--nodes-min 1 \\
+	--nodes-max 3 \\
+	--node-ami auto
+\'\'\''''
+        }
 
-		stage('Create kubernetes cluster') {
-			steps {
-				withAWS(region:'us-west-2', credentials:'aws-static') {
-					sh '''
-						eksctl create cluster \
-						--name capstonecluster \
-						--version 1.13 \
-						--nodegroup-name standard-workers \
-						--node-type t2.small \
-						--nodes 2 \
-						--nodes-min 1 \
-						--nodes-max 3 \
-						--node-ami auto
-					'''
-				}
-			}
-		}
+      }
+    }
 
-		
+    stage('Create config file cluster') {
+      steps {
+        withAWS(region: 'us-west-2', credentials: 'aws-static') {
+          sh '''
+sh \'\'\'
+	aws eks --region us-west-2 update-kubeconfig --name capstonecluster
+\'\'\''''
+        }
 
-		stage('Create conf file cluster') {
-			steps {
-				withAWS(region:'us-west-2', credentials:'aws-static') {
-					sh '''
-						aws eks --region us-west-2 update-kubeconfig --name capstonecluster
-					'''
-				}
-			}
-		}
+      }
+    }
 
-	}
+  }
 }
