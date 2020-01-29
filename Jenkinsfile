@@ -33,10 +33,8 @@ pipeline {
     stage('Set current kubectl context') {
       steps {
         withAWS(region: 'us-west-2', credentials: '292152339671') {
-          sh 'export KUBECONFIG=$KUBECONFIG:~/.kube/config'
           sh '''
-						kubectl config use-context arn:aws:eks:us-west-2:292152339671:cluster/capstonecluster
-					'''
+						kubectl config use-context arn:aws:iam::292152339671:role/eksctl-capstonecluster-cluster-ServiceRole-RIQJ53Q6JTKU'''
         }
 
       }
