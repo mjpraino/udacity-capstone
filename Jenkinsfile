@@ -75,7 +75,7 @@ pipeline {
       }
     }
 
-    stage('Wait user approve') {
+    stage('Pending User Approval') {
       steps {
         input 'Ready to redirect traffic to green?'
       }
