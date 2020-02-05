@@ -46,6 +46,7 @@ pipeline {
       steps {
         withAWS(region: 'us-west-2', credentials: '292152339671') {
           sh '''
+	                                        aws2 sts get-caller-identity
 						kubectl apply -f ./blue-controller.json
 					'''
         }
